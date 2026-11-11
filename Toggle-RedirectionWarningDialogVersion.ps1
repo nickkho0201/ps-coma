@@ -1,11 +1,11 @@
-﻿param(
+param(
     [switch]$ElevationRequested
 )
 
 & {
     param($invocationPath, $elevationRequested)
 
-    $toggle = {
+    $toggleSource = @'
         param(
             [switch]$ElevationRequested,
             [string]$ScriptPath = $PSCommandPath
@@ -78,7 +78,16 @@
         }
 
         exit $exitCode
+'@
+
+    # Read the UTF-8 body explicitly when Windows PowerShell opens the file locally.
+    if ($invocationPath -and $PSVersionTable.PSEdition -eq 'Desktop') {
+        $source = [IO.File]::ReadAllText($invocationPath, [Text.Encoding]::UTF8)
+        $tokens = $null
+        $null = [System.Management.Automation.Language.Parser]::ParseInput($source, [ref]$tokens, [ref]$null)
+        $toggleSource = ($tokens | Where-Object Kind -eq 'HereStringLiteral' | Select-Object -First 1).Value
     }
+    $toggle = [scriptblock]::Create($toggleSource)
 
     if ($invocationPath) {
         # Run the same body when called as a local .ps1 file.
