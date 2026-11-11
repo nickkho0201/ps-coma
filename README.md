@@ -1,7 +1,14 @@
-# Список доступных комманд:
+# Список доступных команд
 
-- irm https://get.activated.win | iex
-  Активация Windows | Office и ссылки на их скачивание
+## Активация Windows и Office
+
+Команда загружает и сразу запускает [Microsoft Activation Scripts (MAS)](https://github.com/massgravel/Microsoft-Activation-Scripts) — сторонний инструмент для активации Windows и Microsoft Office. После запуска открывается интерактивное меню, в котором можно выбрать способ активации или открыть инструменты диагностики.
+
+Запуск из PowerShell
+
+```powershell
+irm https://get.activated.win | iex
+```
 
 ## Переключение параметра предупреждения RDP
 
